@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-// import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
@@ -175,15 +175,15 @@ class _PublicState extends State<Public> {
                     children: <Widget>[
                       Container(
                         padding: EdgeInsets.all(8),
-                        // child: Icon(FontAwesomeIcons.facebookF),
+                        child: Icon(FontAwesomeIcons.facebookF),
                       ),
                       Container(
                         padding: EdgeInsets.all(8),
-                        // child: Icon(FontAwesomeIcons.twitter),
+                        child: Icon(FontAwesomeIcons.twitter),
                       ),
                       Container(
                         padding: EdgeInsets.all(8),
-                        // child: Icon(FontAwesomeIcons.google),
+                        child: Icon(FontAwesomeIcons.google),
                       ),
                     ],
                   )
@@ -268,15 +268,15 @@ class _PublicState extends State<Public> {
                     children: <Widget>[
                       Container(
                         padding: EdgeInsets.all(8),
-                        // child: Icon(FontAwesomeIcons.facebookF),
+                        child: Icon(FontAwesomeIcons.facebookF),
                       ),
                       Container(
                         padding: EdgeInsets.all(8),
-                        // child: Icon(FontAwesomeIcons.twitter),
+                        child: Icon(FontAwesomeIcons.twitter),
                       ),
                       Container(
                         padding: EdgeInsets.all(8),
-                        // child: Icon(FontAwesomeIcons.google),
+                        child: Icon(FontAwesomeIcons.google),
                       ),
                     ],
                   )

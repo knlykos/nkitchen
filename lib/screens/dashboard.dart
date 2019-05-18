@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flip_card/flip_card.dart';
+import 'package:mobile/screens/add_card.dart';
+import 'package:mobile/widgets/drawer.dart';
 
 class Dashboard extends StatefulWidget {
   @override
@@ -14,6 +17,55 @@ class _DashboardState extends State {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        body: Container(
+          child: Column(
+            children: <Widget>[
+              Card(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    const ListTile(
+                      leading: Icon(Icons.card_giftcard),
+                      title: Text('4554 4545 5454'),
+                      subtitle:
+                          Text('Music by Julie Gable. Lyrics by Sidney Stein.'),
+                      enabled: true,
+                    ),
+                  ],
+                ),
+              ),
+              Card(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    const ListTile(
+                      leading: Icon(Icons.card_giftcard),
+                      title: Text('4554 4545 5454'),
+                      subtitle:
+                          Text('Music by Julie Gable. Lyrics by Sidney Stein.'),
+                      enabled: true,
+                    ),
+                  ],
+                ),
+              ),
+              Card(
+                elevation: 5.0,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    const ListTile(
+                      leading: Icon(Icons.card_giftcard),
+                      title: Text('4554 4545 5454'),
+                      subtitle:
+                          Text('Music by Julie Gable. Lyrics by Sidney Stein.'),
+                      enabled: true,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
         appBar: AppBar(
           title: Text('Mi Calimax'),
           automaticallyImplyLeading: false,
@@ -22,34 +74,7 @@ class _DashboardState extends State {
             onPressed: _printFn,
           ),
         ),
-        drawer: Drawer(
-          child: ListView(
-            children: <Widget>[
-              UserAccountsDrawerHeader(
-                accountName: Text('Nefi Lopez'),
-                accountEmail: Text('nlopezg87@gmail.com'),
-                currentAccountPicture: CircleAvatar(
-                  backgroundColor:
-                      Theme.of(context).platform == TargetPlatform.iOS
-                          ? Colors.blue
-                          : Colors.white,
-                  child: Text(
-                    "NL",
-                    style: TextStyle(fontSize: 30.0),
-                  ),
-                ),
-              ),
-              ListTile(
-                title: Text('Inicio'),
-                trailing: Icon(Icons.chevron_right),
-              ),
-              ListTile(
-                title: Text('Tarjetas'),
-                trailing: Icon(Icons.chevron_right),
-              ),
-            ],
-          ),
-        ),
+        drawer: CxDrawer(),
         key: _scaffoldKey);
   }
 }
