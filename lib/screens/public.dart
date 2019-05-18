@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+// import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import './../models/user.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+final storage = new FlutterSecureStorage();
 
 class Public extends StatefulWidget {
   @override
@@ -16,24 +18,35 @@ class _PublicState extends State<Public> {
   final lpasswordController = TextEditingController();
   final susernameController = TextEditingController();
   final spasswordController = TextEditingController();
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool hasUser = false;
   // Controla la manera en que se va a user el widget, si alguno usuario ya inicio sesion anteriormente
   // Guarda el estado en alguna base de datos o en disco.
-  void _singUp() {
+  void _login() {
     Future<List<Usuario>> fetchPost() async {
       final response = await http.post('https://calimaxjs.com/usuario',
           body: json.encode({
             'param_in': {
               'action': 'LG',
               'email': this.lusernameController.text,
-              'password': this.lpasswordController.text,
-              'param_out': 'gettoken'
+              'password': this.lpasswordController.text
             },
+            'param_out': {'gettoken': ''},
             'funcion': 'sp_usuario'
           }),
           headers: {'Content-type': 'application/json'});
-      var responseJson = (json.decode(response.body) as List).map((e) => Usuario.fromJson(e)).toList();
-      print(responseJson[0].codigo);
+      var responseJson = (json.decode(response.body) as List)
+          .map((e) => Usuario.fromJson(e))
+          .toList();
+
+      // storage.write(key: 'token', value: responseJson[0].token);
+      if (responseJson[0].codigo == 0) {
+        Navigator.pushNamed(context, '/dashboard');
+      } else {
+        final snackBar = SnackBar(content: Text(responseJson[0].mensaje));
+        _scaffoldKey.currentState.showSnackBar(snackBar);
+      }
       return responseJson;
     }
 
@@ -53,224 +66,224 @@ class _PublicState extends State<Public> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: DefaultTabController(
-        length: 2,
-        child: Scaffold(
-          resizeToAvoidBottomPadding: false,
-          appBar: AppBar(
-            title: Container(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  // Image.asset('assets/images/nkodex-logo.png'),
-                ],
-              ),
-            ),
-            backgroundColor: Colors.white,
-            bottom: TabBar(
-              labelColor: Colors.black,
-              indicatorColor: Colors.indigo,
-              tabs: <Widget>[
-                Tab(
-                  text: 'Iniciar Sesión',
-                ),
-                Tab(
-                  text: 'Registro',
-                )
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        key: _scaffoldKey,
+        resizeToAvoidBottomPadding: false,
+        appBar: AppBar(
+          title: Container(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                // Image.asset('assets/images/nkodex-logo.png'),
               ],
             ),
           ),
-          // https://flutter.dev/docs/development/ui/layout
-          body: TabBarView(
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.all(30.0),
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.fromLTRB(0, 24, 0, 0),
-                      child: TextFormField(
-                        controller: lusernameController,
-                        obscureText: false,
-                        decoration:
-                            InputDecoration(hintText: 'Correo Electrónico'),
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.fromLTRB(0, 24, 0, 0),
-                      child: TextFormField(
-                        controller: lpasswordController,
-                        obscureText: true,
-                        decoration: InputDecoration(hintText: 'Contraseña'),
-                      ),
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: Container(
-                            padding: EdgeInsets.fromLTRB(0, 16, 0, 0),
-                            child: FlatButton(
-                              color: Colors.indigo,
-                              textColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(7),
-                              ),
-                              onPressed: _singUp,
-                              child: Text('Iniciar Sesión'),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      padding: EdgeInsets.fromLTRB(0, 0, 0, 8),
-                      child: Text('Olvidé mi Contraseña'),
-                    ),
-                    Expanded(
-                      child: Row(
-                        children: <Widget>[],
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
-                      child: Divider(),
-                    ),
-                    // Row(
-                    //   children: <Widget>[
-                    //     Expanded(
-                    //       child: Container(
-                    //         child: FlatButton(
-                    //           color: Colors.indigo,
-                    //           textColor: Colors.white,
-                    //           shape: RoundedRectangleBorder(
-                    //             borderRadius: BorderRadius.circular(7),
-                    //           ),
-                    //           onPressed: () {
-                    //             print('Login with face ID');
-                    //           },
-                    //           child: Text('Login with face ID'),
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.all(8),
-                          child: Icon(FontAwesomeIcons.facebookF),
-                        ),
-                        Container(
-                          padding: EdgeInsets.all(8),
-                          child: Icon(FontAwesomeIcons.twitter),
-                        ),
-                        Container(
-                          padding: EdgeInsets.all(8),
-                          child: Icon(FontAwesomeIcons.google),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
+          backgroundColor: Colors.white,
+          bottom: TabBar(
+            labelColor: Colors.black,
+            indicatorColor: Colors.indigo,
+            tabs: <Widget>[
+              Tab(
+                text: 'Iniciar Sesión',
               ),
-              Container(
-                padding: EdgeInsets.all(30.0),
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.fromLTRB(0, 24, 0, 0),
-                      child: TextFormField(
-                        controller: susernameController,
-                        obscureText: false,
-                        decoration: InputDecoration(hintText: 'Username'),
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.fromLTRB(0, 24, 0, 0),
-                      child: TextFormField(
-                        controller: spasswordController,
-                        obscureText: true,
-                        decoration: InputDecoration(hintText: 'Password'),
-                      ),
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: Container(
-                            padding: EdgeInsets.fromLTRB(0, 16, 0, 0),
-                            child: FlatButton(
-                              color: Colors.indigo,
-                              textColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(7),
-                              ),
-                              onPressed: () {
-                                print(susernameController.text);
-                                print(spasswordController.text);
-                              },
-                              child: Text('Sign Up'),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    // Container(
-                    //   padding: EdgeInsets.fromLTRB(0, 0, 0, 8),
-                    //   child: Text('Forgot password'),
-                    // ),
-                    Expanded(
-                      child: Row(
-                        children: <Widget>[],
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
-                      child: Divider(),
-                    ),
-                    // Row(
-                    //   children: <Widget>[
-                    //     Expanded(
-                    //       child: Container(
-                    //         child: FlatButton(
-                    //           color: Colors.indigo,
-                    //           textColor: Colors.white,
-                    //           shape: RoundedRectangleBorder(
-                    //             borderRadius: BorderRadius.circular(7),
-                    //           ),
-                    //           onPressed: () {
-                    //             print('Login with face ID');
-                    //           },
-                    //           child: Text('Login with face ID'),
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.all(8),
-                          child: Icon(FontAwesomeIcons.facebookF),
-                        ),
-                        Container(
-                          padding: EdgeInsets.all(8),
-                          child: Icon(FontAwesomeIcons.twitter),
-                        ),
-                        Container(
-                          padding: EdgeInsets.all(8),
-                          child: Icon(FontAwesomeIcons.google),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
+              Tab(
+                text: 'Registro',
+              )
             ],
           ),
+        ),
+        // https://flutter.dev/docs/development/ui/layout
+        body: TabBarView(
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.all(30.0),
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.fromLTRB(0, 24, 0, 0),
+                    child: TextFormField(
+                      controller: lusernameController,
+                      obscureText: false,
+                      keyboardType: TextInputType.emailAddress,
+                      decoration:
+                          InputDecoration(hintText: 'Correo Electrónico'),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(0, 24, 0, 0),
+                    child: TextFormField(
+                      controller: lpasswordController,
+                      obscureText: true,
+                      decoration: InputDecoration(hintText: 'Contraseña'),
+                    ),
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: Container(
+                          padding: EdgeInsets.fromLTRB(0, 16, 0, 0),
+                          child: FlatButton(
+                            color: Colors.indigo,
+                            textColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(7),
+                            ),
+                            onPressed: _login,
+                            child: Text('Iniciar Sesión'),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(0, 0, 0, 8),
+                    child: Text('Olvidé mi Contraseña'),
+                  ),
+                  Expanded(
+                    child: Row(
+                      children: <Widget>[],
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
+                    child: Divider(),
+                  ),
+                  // Row(
+                  //   children: <Widget>[
+                  //     Expanded(
+                  //       child: Container(
+                  //         child: FlatButton(
+                  //           color: Colors.indigo,
+                  //           textColor: Colors.white,
+                  //           shape: RoundedRectangleBorder(
+                  //             borderRadius: BorderRadius.circular(7),
+                  //           ),
+                  //           onPressed: () {
+                  //             print('Login with face ID');
+                  //           },
+                  //           child: Text('Login with face ID'),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.all(8),
+                        // child: Icon(FontAwesomeIcons.facebookF),
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(8),
+                        // child: Icon(FontAwesomeIcons.twitter),
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(8),
+                        // child: Icon(FontAwesomeIcons.google),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.all(30.0),
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.fromLTRB(0, 24, 0, 0),
+                    child: TextFormField(
+                      controller: susernameController,
+                      obscureText: false,
+                      decoration: InputDecoration(hintText: 'Usuario'),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(0, 24, 0, 0),
+                    child: TextFormField(
+                      controller: spasswordController,
+                      obscureText: true,
+                      decoration: InputDecoration(hintText: 'Contraseña'),
+                    ),
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: Container(
+                          padding: EdgeInsets.fromLTRB(0, 16, 0, 0),
+                          child: FlatButton(
+                            color: Colors.indigo,
+                            textColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(7),
+                            ),
+                            onPressed: () {
+                              print(susernameController.text);
+                              print(spasswordController.text);
+                            },
+                            child: Text('Registrarse'),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  // Container(
+                  //   padding: EdgeInsets.fromLTRB(0, 0, 0, 8),
+                  //   child: Text('Forgot password'),
+                  // ),
+                  Expanded(
+                    child: Row(
+                      children: <Widget>[],
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
+                    child: Divider(),
+                  ),
+                  // Row(
+                  //   children: <Widget>[
+                  //     Expanded(
+                  //       child: Container(
+                  //         child: FlatButton(
+                  //           color: Colors.indigo,
+                  //           textColor: Colors.white,
+                  //           shape: RoundedRectangleBorder(
+                  //             borderRadius: BorderRadius.circular(7),
+                  //           ),
+                  //           onPressed: () {
+                  //             print('Login with face ID');
+                  //           },
+                  //           child: Text('Login with face ID'),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.all(8),
+                        // child: Icon(FontAwesomeIcons.facebookF),
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(8),
+                        // child: Icon(FontAwesomeIcons.twitter),
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(8),
+                        // child: Icon(FontAwesomeIcons.google),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

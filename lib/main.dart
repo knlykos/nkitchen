@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import './screens/public.dart';
+import './screens/dashboard.dart';
+
 
 void main() => runApp(MyApp());
 
@@ -9,6 +11,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'NKODEX',
+      routes: {
+        '/public': (context) => Public(),
+        '/dashboard': (context) => Dashboard()
+      },
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -127,15 +133,9 @@ class _MyHomePageState extends State<MyHomePage> {
                         borderRadius: BorderRadius.circular(7),
                       ),
                       onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return Public();
-                            },
-                          ),
-                        );
+                        Navigator.pushNamed(context, '/public');
                       },
-                      child: Text('Get Started'),
+                      child: Text('Iniciar'),
                     ),
                   ),
                 ],

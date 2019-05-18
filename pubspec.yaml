@@ -20,6 +20,7 @@ dependencies:
   flutter:
     sdk: flutter
   font_awesome_flutter: ^8.4.0
+  flutter_secure_storage: ^3.2.1+1
   http: ^0.12.0+1
 
   # The following adds the Cupertino Icons font to your application.
@@ -44,6 +45,7 @@ flutter:
   assets:
     - assets/images/mainpage.png
     - assets/images/nkodex-logo.png
+    - assets/images/calimax.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.
   # For details regarding adding assets from package dependencies, see
