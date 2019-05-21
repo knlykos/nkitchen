@@ -17,7 +17,30 @@ class _DashboardState extends State {
 
   Widget _buildListItem(BuildContext context, DocumentSnapshot document) {
     return Card(
-      child: Text('Hey'),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          ListTile(
+            leading: Icon(Icons.album),
+            title: Text(document.data['description']),
+            subtitle: Text('\$' + document.data['price'].toString()),
+          ),
+          ButtonTheme.bar(
+            child: ButtonBar(
+              children: <Widget>[
+                FlatButton(
+                  child: Text('EDITAR'),
+                  onPressed: () {},
+                ),
+                FlatButton(
+                  child: const Text('ELIMINAR'),
+                  onPressed: () {/* ... */},
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 
@@ -47,7 +70,6 @@ class _DashboardState extends State {
           builder: (context, snapshot) {
             if (!snapshot.hasData) return Text('Loading...');
             return ListView.builder(
-              itemExtent: 40.0,
               itemCount: snapshot.data.documents.length,
               itemBuilder: (context, index) =>
                   _buildListItem(context, snapshot.data.documents[index]),
