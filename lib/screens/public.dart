@@ -40,7 +40,7 @@ class _PublicState extends State<Public> {
           .map((e) => Usuario.fromJson(e))
           .toList();
 
-      // storage.write(key: 'token', value: responseJson[0].token);
+      storage.write(key: 'token', value: responseJson[0].token);
       if (responseJson[0].codigo == 0) {
         Navigator.pushNamed(context, '/dashboard');
       } else {
