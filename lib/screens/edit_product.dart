@@ -1,27 +1,24 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:mobile/provider/products.dart';
+import 'package:provider/provider.dart';
 
-class AddProduct extends StatefulWidget {
-  AddProduct({this.id, this.code, this.description, this.price});
-  final String id;
+class EditProduct extends StatelessWidget {
   final String code;
   final String description;
-  final num price;
+  final double price;
 
-  @override
-  _AddProductState createState() => _AddProductState();
-}
-
-class _AddProductState extends State<AddProduct> {
-  final _codeController = TextEditingController();
-  final _descriptionController = TextEditingController();
-  final _priceController = TextEditingController();
+  EditProduct({this.code, this.description, this.price});
 
   @override
   Widget build(BuildContext context) {
-    final productsProvider = ProductsProvider();
+    final productsProvider = Provider.of<ProductsProvider>(context);
+    final _codeController = TextEditingController(text: productsProvider.code);
+    final _descriptionController =
+        TextEditingController(text: productsProvider.description);
+    final _priceController =
+        TextEditingController(text: productsProvider.price.toString());
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -50,11 +47,6 @@ class _AddProductState extends State<AddProduct> {
                       ),
                       Flexible(
                         child: TextField(
-                          inputFormatters: <TextInputFormatter>[
-                            LengthLimitingTextInputFormatter(12),
-                            WhitelistingTextInputFormatter.digitsOnly,
-                            BlacklistingTextInputFormatter.singleLineFormatter
-                          ],
                           controller: _priceController,
                           decoration: InputDecoration(
                               isDense: true, labelText: 'Price'),
@@ -66,13 +58,18 @@ class _AddProductState extends State<AddProduct> {
                   RaisedButton(
                     child: Text('Registrar'),
                     onPressed: () {
-                      productsProvider
-                          .addProducts(
-                              code: _codeController.text,
-                              description: _descriptionController.text,
-                              price: num.parse(_priceController.text))
-                          .whenComplete(() {
+                      productsProvider.code = _codeController.text;
+                      productsProvider.description =
+                          _descriptionController.text;
+                      productsProvider.price =
+                          double.parse(_priceController.text);
+
+                      // code: _codeController.text,
+                      // description: _descriptionController.text,
+                      // this.productsProvide.price: _priceController.text
+                      productsProvider.updateProduct().whenComplete(() {
                         Navigator.of(context).pushNamed('/products');
+
                       });
                     },
                   )
@@ -122,3 +119,7 @@ class _AddProductState extends State<AddProduct> {
     );
   }
 }
+
+// class _EditProduct extends State<AddProduct> {
+
+// }

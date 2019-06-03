@@ -11,8 +11,6 @@ class _AddCardState extends State<AddCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-
-    );
+    return Scaffold(body: Text('Home Page'));
   }
 }

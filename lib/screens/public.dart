@@ -42,7 +42,7 @@ class _PublicState extends State<Public> {
 
       storage.write(key: 'token', value: responseJson[0].token);
       if (responseJson[0].codigo == 0) {
-        Navigator.pushNamed(context, '/dashboard');
+        Navigator.pushNamed(context, '/products');
       } else {
         final snackBar = SnackBar(content: Text(responseJson[0].mensaje));
         _scaffoldKey.currentState.showSnackBar(snackBar);

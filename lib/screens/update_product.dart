@@ -48,22 +48,7 @@ class _UpdateProductState extends State<UpdateProduct> {
           RaisedButton(
             child: Text('Actualizar'),
             onPressed: () {
-              print(int.parse(_priceController.text).runtimeType);
-              DocumentReference ref =
-                  Firestore.instance.collection('products').document(widget.id);
-              Map<String, dynamic> data = {
-                'code': _codeController.text,
-                'description': _descriptionController.text,
-                'price': int.parse(_priceController.text)
-              };
-
-              Firestore.instance
-                  .collection('products')
-                  .document(widget.id)
-                  .updateData(data)
-                  .whenComplete(() {
-                print('Actualizacion realizada');
-              });
+              
             },
           )
         ],

@@ -22,7 +22,7 @@ class CxDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.home),
-            title: Text('Inicio'),
+            title: Text('Home'),
             // trailing: Icon(Icons.chevron_right),
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(builder: (context) {
@@ -31,13 +31,21 @@ class CxDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: Icon(Icons.credit_card),
-            title: Text('Tarjetas'),
+            leading: Icon(Icons.fastfood),
+            title: Text('Food'),
             // trailing: Icon(Icons.chevron_right),
             onTap: () {
-              print('Tarjetas');
+              Navigator.of(context).pushNamed('/products');
             },
           ),
+          ListTile(
+            leading: Icon(Icons.receipt),
+            title: Text('Orders'),
+            // trailing: Icon(Icons.chevron_right),
+            onTap: () {
+              Navigator.of(context).pushNamed('/orders');
+            },
+          )
         ],
       ),
     );
