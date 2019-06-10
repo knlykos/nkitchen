@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:mobile/provider/products.dart';
+import 'package:nkitchen/provider/products.dart';
 
 class FoodDetails extends StatelessWidget {
   @override

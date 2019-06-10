@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/screens/add_card.dart';
+import 'package:nkitchen/screens/add_card.dart';
 
 class CxDrawer extends StatelessWidget {
   @override

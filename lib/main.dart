@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/provider/products.dart';
-import 'package:mobile/screens/add_product.dart';
-import 'package:mobile/screens/edit_product.dart';
+import 'package:nkitchen/provider/products.dart';
+import 'package:nkitchen/screens/add_product.dart';
+import 'package:nkitchen/screens/edit_product.dart';
 import './screens/public.dart';
 import './screens/dashboard.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        title: 'NKODEX',
+        title: 'nKitchen',
         routes: {
           '/public': (context) => Public(),
           '/products': (context) => Dashboard(),
@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
           // is not restarted.
           primarySwatch: Colors.indigo,
         ),
-        home: MyHomePage(title: 'Nkodex'),
+        home: MyHomePage(title: 'nKitchen'),
       ),
     );
   }
