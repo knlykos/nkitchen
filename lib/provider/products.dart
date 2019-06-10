@@ -6,6 +6,7 @@ class ProductsProvider with ChangeNotifier {
   String _code;
   String _description;
   num _price;
+  String _image;
 
   set id(String id) {
     this._id = id;
@@ -23,6 +24,10 @@ class ProductsProvider with ChangeNotifier {
     this._price = price;
   }
 
+  set image(String image) {
+    this._image = image;
+  }
+
   get id {
     return this._id;
   }
@@ -37,6 +42,10 @@ class ProductsProvider with ChangeNotifier {
 
   get price {
     return _price;
+  }
+
+  get image {
+    return _image;
   }
 
   Future<void> addProducts({code: String, description: String, price: num}) {
@@ -68,7 +77,7 @@ class ProductsProvider with ChangeNotifier {
       'description': this._description,
       'price': this._price
     };
-    
+
     return Firestore.instance
         .collection('products')
         .document(this._id)
