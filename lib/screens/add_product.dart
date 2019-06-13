@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mobile/provider/products.dart';
+import 'package:nkitchen/provider/products.dart';
 
 class AddProduct extends StatefulWidget {
   AddProduct({this.id, this.code, this.description, this.price});

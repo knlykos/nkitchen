@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile/provider/products.dart';
-import 'package:mobile/screens/add_product.dart';
-import 'package:mobile/screens/food/food_details.dart';
+import 'package:nkitchen/provider/products.dart';
+import 'package:nkitchen/screens/add_product.dart';
+import 'package:nkitchen/screens/food/food_details.dart';
 import 'package:provider/provider.dart';
-import 'package:mobile/widgets/drawer.dart';
+import 'package:nkitchen/widgets/drawer.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'dart:async';
 

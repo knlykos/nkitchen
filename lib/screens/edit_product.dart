@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile/provider/products.dart';
+import 'package:nkitchen/provider/products.dart';
 import 'package:provider/provider.dart';
 
 class EditProduct extends StatelessWidget {

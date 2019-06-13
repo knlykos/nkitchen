@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:nkitchen/widgets/star_rating.dart';
 import 'package:provider/provider.dart';
-import 'package:mobile/provider/products.dart';
+import 'package:nkitchen/provider/products.dart';
 
 class FoodDetails extends StatelessWidget {
   @override
@@ -40,24 +41,29 @@ class FoodDetails extends StatelessWidget {
                     Container(
                       height: mediaQuery.padding.top,
                     ),
-                    Expanded(
-                      child: ListTile(
-                        title: Text(productsProvider.description),
-                        subtitle: Text(productsProvider.price.toString()),
-                      ),
+                    ListTile(
+                      title: Text(productsProvider.description),
+                      subtitle: Text(productsProvider.price.toString()),
                     ),
-                    Expanded(
-                      child: Text(
-                          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi et vulputate nisi, id dapibus ligula. Nullam fringilla magna sed nisl porttitor, vitae pharetra tortor fermentum. Nulla convallis, erat in consequat rhoncus, sapien ipsum vulputate turpis, vel commodo felis elit eget metus. Pellentesque sed tristique erat, eu placerat ante. Nullam purus lectus, elementum non ipsum at, malesuada fermentum justo. Curabitur fermentum ac dolor in ornare. Cras vitae leo quis elit malesuada cursus."),
-                    ),
+
+                    Text(
+                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi et vulputate nisi, id dapibus ligula. Nullam fringilla magna sed nisl porttitor, vitae pharetra tortor fermentum. Nulla convallis, erat in consequat rhoncus, sapien ipsum vulputate turpis, vel commodo felis elit eget metus. Pellentesque sed tristique erat, eu placerat ante. Nullam purus lectus, elementum non ipsum at, malesuada fermentum justo. Curabitur fermentum ac dolor in ornare. Cras vitae leo quis elit malesuada cursus."),
+
+                    StarRating(
+                      value: 5,
+                      filledStar:
+                          Icon(Icons.android, color: Color(0xfff2b01e), size: 32),
+                      unfilledStar: Icon(Icons.star, color: Colors.grey),
+                    )
                   ],
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
     );
+
     Widget heroWidget = Stack(children: <Widget>[
       Hero(
         tag: "card$num",
