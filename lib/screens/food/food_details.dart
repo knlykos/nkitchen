@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:nkitchen/widgets/star_rating.dart';
 import 'package:provider/provider.dart';
 import 'package:nkitchen/provider/products.dart';
+import 'package:smooth_star_rating/smooth_star_rating.dart';
+
 
 class FoodDetails extends StatelessWidget {
+    var rating = 0.0;
   @override
   Widget build(BuildContext context) {
     final productsProvider = Provider.of<ProductsProvider>(context);
@@ -49,13 +52,16 @@ class FoodDetails extends StatelessWidget {
                     Text(
                         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi et vulputate nisi, id dapibus ligula. Nullam fringilla magna sed nisl porttitor, vitae pharetra tortor fermentum. Nulla convallis, erat in consequat rhoncus, sapien ipsum vulputate turpis, vel commodo felis elit eget metus. Pellentesque sed tristique erat, eu placerat ante. Nullam purus lectus, elementum non ipsum at, malesuada fermentum justo. Curabitur fermentum ac dolor in ornare. Cras vitae leo quis elit malesuada cursus."),
 
-                    StarRating(
-                      value: 5,
-                      filledStar:
-                          Icon(Icons.android, color: Color(0xfff2b01e), size: 32),
-                      unfilledStar: Icon(Icons.star, color: Colors.grey),
-                    )
-                  ],
+                    SmoothStarRating(
+          rating: rating,
+          size: 35,
+          starCount: 5,
+          spacing: 2.0,
+          onRatingChanged: (value) {
+  
+          },
+        ),
+                  ], 
                 ),
               ),
             ),
