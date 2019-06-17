@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nkitchen/provider/products.dart';
 import 'package:nkitchen/screens/add_product.dart';
 import 'package:nkitchen/screens/edit_product.dart';
+import 'package:nkitchen/screens/orders.dart';
 import './screens/public.dart';
 import './screens/dashboard.dart';
 import 'package:provider/provider.dart';
@@ -24,7 +25,8 @@ class MyApp extends StatelessWidget {
           '/public': (context) => Public(),
           '/products': (context) => Dashboard(),
           '/product/edit': (context) => EditProduct(),
-          '/product/add': (context) => AddProduct()
+          '/product/add': (context) => AddProduct(),
+          '/orders': (context) => OrdersScreen()
         },
         theme: ThemeData(
           // This is the theme of your application.

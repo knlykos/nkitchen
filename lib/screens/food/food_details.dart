@@ -3,13 +3,16 @@ import 'package:nkitchen/widgets/star_rating.dart';
 import 'package:provider/provider.dart';
 import 'package:nkitchen/provider/products.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
-
+import 'package:nkitchen/models/product_model.dart';
 
 class FoodDetails extends StatelessWidget {
-    var rating = 0.0;
+  num rating;
   @override
   Widget build(BuildContext context) {
     final productsProvider = Provider.of<ProductsProvider>(context);
+    print(productsProvider.productModel.rating);
+    rating = Provider.of<ProductsProvider>(context).rate;
+
     AppBar appBar = new AppBar(
         primary: false,
         leading: IconTheme(
@@ -22,14 +25,14 @@ class FoodDetails extends StatelessWidget {
 
     return Scaffold(
       body: Hero(
-        tag: productsProvider.id,
+        tag: productsProvider.productModel.id,
         child: CustomScrollView(
           slivers: <Widget>[
             SliverAppBar(
               expandedHeight: 400.0,
               flexibleSpace: FlexibleSpaceBar(
                 background: Image.network(
-                  productsProvider.image,
+                  productsProvider.productModel.image,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -38,30 +41,22 @@ class FoodDetails extends StatelessWidget {
               child: Material(
                 child: Column(
                   children: <Widget>[
-                    // Container(
-                    //   height: mediaQuery.padding.top,
-                    // ),
                     Container(
                       height: mediaQuery.padding.top,
                     ),
                     ListTile(
-                      title: Text(productsProvider.description),
-                      subtitle: Text(productsProvider.price.toString()),
+                      title: Text(productsProvider.productModel.description),
+                      subtitle: Text('\$' +
+                          productsProvider.productModel.price.toString()),
                     ),
-
-                    Text(
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi et vulputate nisi, id dapibus ligula. Nullam fringilla magna sed nisl porttitor, vitae pharetra tortor fermentum. Nulla convallis, erat in consequat rhoncus, sapien ipsum vulputate turpis, vel commodo felis elit eget metus. Pellentesque sed tristique erat, eu placerat ante. Nullam purus lectus, elementum non ipsum at, malesuada fermentum justo. Curabitur fermentum ac dolor in ornare. Cras vitae leo quis elit malesuada cursus."),
-
+                    Text(productsProvider.productModel.longDescription),
                     SmoothStarRating(
-          rating: rating,
-          size: 35,
-          starCount: 5,
-          spacing: 2.0,
-          onRatingChanged: (value) {
-  
-          },
-        ),
-                  ], 
+                      rating: productsProvider.productModel.rating.toDouble(),
+                      size: 28,
+                      starCount: 5,
+                      spacing: 2.0,
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -97,17 +92,7 @@ class FoodDetails extends StatelessWidget {
           ),
         ),
       ),
-      Column(
-          // children: <Widget>[
-          //   Container(
-          //     height: mediaQuery.padding.top,
-          //   ),
-          //   ConstrainedBox(
-          //     constraints: BoxConstraints(maxHeight: 275),
-          //     child: appBar,
-          //   )
-          // ],
-          ),
+      Column(),
     ]);
   }
 }
