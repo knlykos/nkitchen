@@ -2,13 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:nkitchen/models/product_model.dart';
 import 'package:nkitchen/provider/products.dart';
-import 'package:nkitchen/screens/add_product.dart';
 import 'package:nkitchen/screens/food/food_details.dart';
-import 'package:nkitchen/services/product_services.dart';
 import 'package:provider/provider.dart';
 import 'package:nkitchen/widgets/drawer.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:rxdart/rxdart.dart';
+
 import 'dart:async';
 
 class Dashboard extends StatefulWidget {
@@ -18,6 +15,7 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   void _printFn() {
     _scaffoldKey.currentState.openDrawer();
   }
@@ -53,21 +51,6 @@ class _DashboardState extends State {
     final productsProvider = Provider.of<ProductsProvider>(context);
 
     return Scaffold(
-        // floatingActionButton: FloatingActionButton(
-        //   child: Icon(Icons.add),
-        //   onPressed: () {
-        //     var id =
-        //         Firestore.instance.collection('products').document().documentID;
-        //     Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-        //       return AddProduct(
-        //         id: id,
-        //         code: '',
-        //         description: '',
-        //         price: 0,
-        //       );
-        //     }));
-        //   },
-        // ),
         body: Column(
           children: <Widget>[
             Expanded(
@@ -82,9 +65,12 @@ class _DashboardState extends State {
         appBar: AppBar(
           title: Text('nKitchen'),
           actions: <Widget>[
-            IconButton(icon: Icon(Icons.add),onPressed: () {
-              Navigator.pushNamed(context, '/product/add');
-            },),
+            IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () {
+                Navigator.pushNamed(context, '/product/add');
+              },
+            ),
           ],
           automaticallyImplyLeading: false,
           leading: IconButton(
@@ -118,7 +104,12 @@ class _DashboardState extends State {
   }
 }
 
-class ProductCards extends StatelessWidget {
+class ProductCards extends StatefulWidget {
+  @override
+  _ProductCardsState createState() => _ProductCardsState();
+}
+
+class _ProductCardsState extends State<ProductCards> {
   @override
   Widget build(BuildContext context) {
     final productsProvider = Provider.of<ProductsProvider>(context);
@@ -185,6 +176,10 @@ class ProductCards extends StatelessWidget {
                       );
                     },
                   ),
+                  Positioned(
+                    right: 0,
+                    child: childPopup(),
+                  ),
                   Container(
                     margin: EdgeInsets.only(top: 250),
                     padding: EdgeInsets.all(5),
@@ -208,4 +203,35 @@ class ProductCards extends StatelessWidget {
       );
     }
   }
+
+  Widget childPopup() => PopupMenuButton<int>(
+        itemBuilder: (context) => [
+              PopupMenuItem(
+                value: 1,
+                child: Text(
+                  "Edit",
+                ),
+              ),
+              PopupMenuItem(
+                value: 2,
+                child: Text(
+                  "Delete",
+                ),
+              ),
+            ],
+        icon: Icon(
+          Icons.more_vert,
+          color: Colors.white,
+        ),
+        onSelected: (value) {
+          switch (value) {
+            case 1:
+              print('edita');
+              break;
+            case 2:
+              print('elimina');
+              break;
+          }
+        },
+      );
 }
