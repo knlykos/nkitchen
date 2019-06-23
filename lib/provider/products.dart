@@ -8,6 +8,7 @@ class ProductsProvider with ChangeNotifier {
   String _description;
   num _price;
   String _image;
+  String _category;
   num _rate = 0.0;
   List<ProductsProvider> _productList;
   final Firestore _db = Firestore.instance;
@@ -15,6 +16,7 @@ class ProductsProvider with ChangeNotifier {
 
   set productModel(ProductModel productModel) {
     this._productModel = productModel;
+    print(this._productModel);
     notifyListeners();
   }
 
@@ -39,6 +41,12 @@ class ProductsProvider with ChangeNotifier {
 
   set image(String image) {
     this._image = image;
+    notifyListeners();
+  }
+
+  set category(String category) {
+    this._category = category;
+    print({'Category Inside', this._category});
     notifyListeners();
   }
 
@@ -67,6 +75,10 @@ class ProductsProvider with ChangeNotifier {
     return _image;
   }
 
+  get category {
+    return _category;
+  }
+
   num get rate {
     return _rate;
   }
@@ -89,18 +101,21 @@ class ProductsProvider with ChangeNotifier {
     //                 .snapshots();
   }
 
-  Future<void> addProducts({code: String, description: String, price: num}) {
-    print(code);
-    print(description);
-    print(price);
+  Future<void> addProducts() {
     var id = Firestore.instance.collection('products').document().documentID;
 
-    Firestore.instance.collection('products').document(id);
+//    Firestore.instance.collection('products').document(id);
     Map<String, dynamic> data = {
-      'code': code,
-      'description': description,
-      'price': price
+      'code': this.productModel.code,
+      'description': this.productModel.description,
+      'price': this.productModel.price,
+      'category': this.productModel.category,
+      'image': this.productModel.image,
+      'long_description': this.productModel.longDescription,
+      'price': this.productModel.price,
+      'rating': this.productModel.rating
     };
+    print(data);
     return Firestore.instance.collection('products').document(id).setData(data);
   }
 
