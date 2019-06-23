@@ -178,7 +178,7 @@ class _ProductCardsState extends State<ProductCards> {
                   ),
                   Positioned(
                     right: 0,
-                    child: childPopup(),
+                    child: PopUpMenuProducts(productModel: productsModel[index],),
                   ),
                   Container(
                     margin: EdgeInsets.only(top: 250),
@@ -203,35 +203,47 @@ class _ProductCardsState extends State<ProductCards> {
       );
     }
   }
+}
 
-  Widget childPopup() => PopupMenuButton<int>(
-        itemBuilder: (context) => [
-              PopupMenuItem(
-                value: 1,
-                child: Text(
-                  "Edit",
-                ),
+class PopUpMenuProducts extends StatelessWidget {
+  ProductModel productModel;
+  PopUpMenuProducts({this.productModel});
+  @override
+  Widget build(BuildContext context) {
+
+    final productProvider = Provider.of<ProductsProvider>(context);
+
+
+    return PopupMenuButton<int>(
+      itemBuilder: (context) => [
+            PopupMenuItem(
+              value: 1,
+              child: Text(
+                "Edit",
               ),
-              PopupMenuItem(
-                value: 2,
-                child: Text(
-                  "Delete",
-                ),
+            ),
+            PopupMenuItem(
+              value: 2,
+              child: Text(
+                "Delete",
               ),
-            ],
-        icon: Icon(
-          Icons.more_vert,
-          color: Colors.white,
-        ),
-        onSelected: (value) {
-          switch (value) {
-            case 1:
-              print('edita');
-              break;
-            case 2:
-              print('elimina');
-              break;
-          }
-        },
-      );
+            ),
+          ],
+      icon: Icon(
+        Icons.more_vert,
+        color: Colors.white,
+      ),
+      onSelected: (value) {
+        switch (value) {
+          case 1:
+            productProvider.productModel = productModel;
+            Navigator.pushNamed(context, '/product/edit');
+            break;
+          case 2:
+            print('elimina');
+            break;
+        }
+      },
+    );
+  }
 }
