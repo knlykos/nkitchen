@@ -4,6 +4,7 @@ class ProductModel {
   String id;
   String code;
   String description;
+  String category;
   num price;
   String image;
   String longDescription;
@@ -13,6 +14,7 @@ class ProductModel {
       {this.id,
       this.code,
       this.description,
+      this.category,
       this.price,
       this.image,
       this.longDescription,
@@ -26,6 +28,7 @@ class ProductModel {
             id: doc.documentID ?? '',
             code: data['code'] ?? '',
             description: data['description'] ?? '',
+            category: data['category'] ?? '',
             price: data['price'] ?? 0.0,
             image: data['image'] ?? '',
             longDescription: data['long_description'] ?? '',
