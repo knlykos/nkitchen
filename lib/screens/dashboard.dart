@@ -81,6 +81,11 @@ class _DashboardState extends State {
         ),
         appBar: AppBar(
           title: Text('nKitchen'),
+          actions: <Widget>[
+            IconButton(icon: Icon(Icons.add),onPressed: () {
+              Navigator.pushNamed(context, '/product/add');
+            },),
+          ],
           automaticallyImplyLeading: false,
           leading: IconButton(
             icon: Icon(Icons.menu),
