@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:nkitchen/models/product_model.dart';
 import 'package:nkitchen/provider/products.dart';
+import 'package:nkitchen/screens/edit_product.dart';
 import 'package:nkitchen/screens/food/food_details.dart';
 import 'package:provider/provider.dart';
 import 'package:nkitchen/widgets/drawer.dart';
@@ -178,7 +179,9 @@ class _ProductCardsState extends State<ProductCards> {
                   ),
                   Positioned(
                     right: 0,
-                    child: PopUpMenuProducts(productModel: productsModel[index],),
+                    child: PopUpMenuProducts(
+                      productModel: productsModel[index],
+                    ),
                   ),
                   Container(
                     margin: EdgeInsets.only(top: 250),
@@ -206,13 +209,15 @@ class _ProductCardsState extends State<ProductCards> {
 }
 
 class PopUpMenuProducts extends StatelessWidget {
-  ProductModel productModel;
-  PopUpMenuProducts({this.productModel});
+  final ProductModel productModel;
+  final int index;
+
+  PopUpMenuProducts({this.productModel, this.index});
+
   @override
   Widget build(BuildContext context) {
 
     final productProvider = Provider.of<ProductsProvider>(context);
-
 
     return PopupMenuButton<int>(
       itemBuilder: (context) => [
@@ -237,7 +242,10 @@ class PopUpMenuProducts extends StatelessWidget {
         switch (value) {
           case 1:
             productProvider.productModel = productModel;
-            Navigator.pushNamed(context, '/product/edit');
+            print({'description', productModel.description});
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+              return EditProduct(key: key, product: productModel);
+            }));
             break;
           case 2:
             print('elimina');

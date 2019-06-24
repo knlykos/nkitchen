@@ -1,24 +1,65 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:nkitchen/provider/categories.dart';
 import 'package:nkitchen/provider/products.dart';
 import 'package:provider/provider.dart';
+import 'package:nkitchen/models/category_model.dart';
+import 'package:nkitchen/models/product_model.dart';
 
-class EditProduct extends StatelessWidget {
-  final String code;
-  final String description;
-  final double price;
+class EditProduct extends StatefulWidget {
+  final ProductModel product;
 
-  EditProduct({this.code, this.description, this.price});
+  EditProduct({Key key, this.product}) : super(key: key);
+
+  @override
+  _EditProductState createState() => _EditProductState();
+}
+
+class _EditProductState extends State<EditProduct> {
+  TextEditingController codeController;
+  TextEditingController descriptionController;
+  TextEditingController longDescriptionController;
+  TextEditingController priceController;
+  TextEditingController imageController;
+  TextEditingController categoryController;
+  TextEditingController rating;
+  String appbarTitle = '';
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     final productsProvider = Provider.of<ProductsProvider>(context);
-    final _codeController = TextEditingController(text: productsProvider.code);
-    final _descriptionController =
-        TextEditingController(text: productsProvider.description);
-    final _priceController =
-        TextEditingController(text: productsProvider.price.toString());
+    setState(() {
+      codeController = TextEditingController(text: widget.product.code);
+      descriptionController =
+          TextEditingController(text: widget.product.description);
+      longDescriptionController =
+          TextEditingController(text: widget.product.longDescription);
+      priceController =
+          TextEditingController(text: widget.product.price.toString());
+      imageController = TextEditingController(text: widget.product.image);
+      categoryController = TextEditingController(text: widget.product.category);
+    });
+
+//    setState(() {
+//      descriptionController.valu
+//    });
+
+//    descriptionController.text = productsProvider.productModel.description;
+//    codeController.text = widget.product.code;
+//    descriptionController.text = widget.product.description;
+//    longDescriptionController.text = widget.product.longDescription;
+//    priceController.text = widget.product.price.toString();
+//    imageController.text = widget.product.image;
+//    categoryController.text = widget.product.category;
+
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -29,15 +70,23 @@ class EditProduct extends StatelessWidget {
               child: Column(
                 children: <Widget>[
                   TextField(
-                    controller: _descriptionController,
+                    maxLines: 1,
+                    controller: descriptionController,
+                    onChanged: (value) {},
                     decoration: InputDecoration(
                         isDense: true, labelText: 'Description'),
+                  ),
+                  TextField(
+                    maxLines: 5,
+                    controller: longDescriptionController,
+                    decoration: InputDecoration(
+                        isDense: true, labelText: 'Long Description'),
                   ),
                   Row(
                     children: <Widget>[
                       Flexible(
                         child: TextField(
-                          controller: _codeController,
+                          controller: codeController,
                           decoration:
                               InputDecoration(isDense: true, labelText: 'Code'),
                         ),
@@ -47,7 +96,13 @@ class EditProduct extends StatelessWidget {
                       ),
                       Flexible(
                         child: TextField(
-                          controller: _priceController,
+                          maxLines: 1,
+                          inputFormatters: <TextInputFormatter>[
+                            LengthLimitingTextInputFormatter(12),
+                            WhitelistingTextInputFormatter.digitsOnly,
+                            BlacklistingTextInputFormatter.singleLineFormatter
+                          ],
+                          controller: priceController,
                           decoration: InputDecoration(
                               isDense: true, labelText: 'Price'),
                           keyboardType: TextInputType.number,
@@ -55,22 +110,32 @@ class EditProduct extends StatelessWidget {
                       ),
                     ],
                   ),
+                  TextField(
+                    controller: imageController,
+                    decoration:
+                        InputDecoration(isDense: true, labelText: 'Image URL'),
+                  ),
+                  StreamProvider.value(
+                    value: CategoriesProvider().getStreamCategories(),
+                    child: CategoriesDropdown(),
+                  ),
                   RaisedButton(
-                    child: Text('Registrar'),
+                    child: Text('Save'),
                     onPressed: () {
-                      productsProvider.code = _codeController.text;
-                      productsProvider.description =
-                          _descriptionController.text;
-                      productsProvider.price =
-                          double.parse(_priceController.text);
-
-                      // code: _codeController.text,
-                      // description: _descriptionController.text,
-                      // this.productsProvide.price: _priceController.text
-                      productsProvider.updateProduct().whenComplete(() {
-                        Navigator.of(context).pushNamed('/products');
-
-                      });
+                      {
+                        productsProvider.productModel = ProductModel(
+                            id: widget.product.id,
+                            code: codeController.text,
+                            image: imageController.text,
+                            category: productsProvider.category,
+                            description: descriptionController.text,
+                            longDescription: longDescriptionController.text,
+                            price: num.parse(priceController.text),
+                            rating: 5);
+                        productsProvider.updateProduct().whenComplete(() {
+                          Navigator.of(context).pushNamed('/products');
+                        });
+                      }
                     },
                   )
                 ],
@@ -104,19 +169,44 @@ class EditProduct extends StatelessWidget {
         ),
         appBar: AppBar(
           title: Text('Nuevo Producto'),
-          bottom: TabBar(
-            tabs: <Widget>[
-              Tab(
-                icon: Icon(Icons.edit),
-              ),
-              Tab(
-                icon: Icon(Icons.edit_attributes),
-              )
-            ],
-          ),
         ),
       ),
     );
+  }
+}
+
+class CategoriesDropdown extends StatefulWidget {
+  CategoriesDropdown({Key key}) : super(key: key);
+
+  @override
+  _CategoriesDropdownState createState() => _CategoriesDropdownState();
+}
+
+class _CategoriesDropdownState extends State<CategoriesDropdown> {
+  String dropdownValue = 'Pastas';
+
+  Widget build(BuildContext context) {
+    final categoriesModel = Provider.of<List<CategoryModel>>(context);
+    final productsProvider = Provider.of<ProductsProvider>(context);
+    print({'Category', productsProvider.category});
+    if (categoriesModel.isNotEmpty) {
+      return DropdownButton<String>(
+        value: dropdownValue,
+        onChanged: (String newValue) {
+          setState(() {
+            dropdownValue = newValue;
+            productsProvider.category = dropdownValue;
+          });
+        },
+        items: categoriesModel
+            .map<DropdownMenuItem<String>>((CategoryModel value) {
+          return DropdownMenuItem<String>(
+            value: value.name,
+            child: Text(value.name),
+          );
+        }).toList(),
+      );
+    }
   }
 }
 
