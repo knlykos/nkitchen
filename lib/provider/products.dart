@@ -139,11 +139,18 @@ class ProductsProvider with ChangeNotifier {
       'rating': this.productModel.rating
     };
 
-    print({'products',data});
+    print({'products', data});
 
     return Firestore.instance
         .collection('products')
         .document(this.productModel.id)
         .updateData(data);
+  }
+
+  Future<void> deleteProduct(String documentID) {
+    return Firestore.instance
+        .collection('products')
+        .document(documentID)
+        .delete();
   }
 }

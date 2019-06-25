@@ -216,7 +216,6 @@ class PopUpMenuProducts extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final productProvider = Provider.of<ProductsProvider>(context);
 
     return PopupMenuButton<int>(
@@ -242,13 +241,29 @@ class PopUpMenuProducts extends StatelessWidget {
         switch (value) {
           case 1:
             productProvider.productModel = productModel;
-            print({'description', productModel.description});
             Navigator.of(context).push(MaterialPageRoute(builder: (context) {
               return EditProduct(key: key, product: productModel);
             }));
             break;
           case 2:
-            print('elimina');
+            productProvider.deleteProduct(productModel.id).whenComplete(() {
+              Scaffold.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    'Se elimino: ' + productModel.description
+                  ),
+                ),
+              );
+            }
+
+//              Scaffold.of(context).showSnackBar(
+//                SnackBar(
+//                  content: Text(
+//                    productsModel[index].description + ' agregado',
+//                  ),
+//                ),
+//              );
+                );
             break;
         }
       },
