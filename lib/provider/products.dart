@@ -115,7 +115,7 @@ class ProductsProvider with ChangeNotifier {
       'price': this.productModel.price,
       'rating': this.productModel.rating
     };
-    print(data);
+
     return Firestore.instance.collection('products').document(id).setData(data);
   }
 
@@ -129,14 +129,28 @@ class ProductsProvider with ChangeNotifier {
 
   Future<void> updateProduct() {
     Map<String, dynamic> data = {
-      'code': this._code,
-      'description': this._description,
-      'price': this._price
+      'code': this.productModel.code,
+      'description': this.productModel.description,
+      'price': this.productModel.price,
+      'category': this.productModel.category,
+      'image': this.productModel.image,
+      'long_description': this.productModel.longDescription,
+      'price': this.productModel.price,
+      'rating': this.productModel.rating
     };
+
+    print({'products', data});
 
     return Firestore.instance
         .collection('products')
-        .document(this._id)
+        .document(this.productModel.id)
         .updateData(data);
+  }
+
+  Future<void> deleteProduct(String documentID) {
+    return Firestore.instance
+        .collection('products')
+        .document(documentID)
+        .delete();
   }
 }
