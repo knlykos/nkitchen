@@ -25,6 +25,7 @@ class _AddProductState extends State<AddProduct> {
 
   @override
   Widget build(BuildContext context) {
+    ProductModel productModel;
     final productsProvider = Provider.of<ProductsProvider>(context);
     return Scaffold(
       body: Container(
